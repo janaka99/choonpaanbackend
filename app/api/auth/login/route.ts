@@ -1,0 +1,116 @@
+import { LoginSchema } from "@/schemas/user";
+import bcrypt from "bcryptjs";
+import { NextRequest, NextResponse } from "next/server";
+import { prisma } from "@/lib/prisma";
+import { createToken } from "@/utils/createToken";
+
+export async function POST(req: NextRequest, res: NextResponse) {
+  try {
+    const { email, password } = await req.json();
+
+    const { success, data } = LoginSchema.safeParse({
+      email,
+      password,
+    });
+    if (!success) {
+      return NextResponse.json(
+        { error: true, message: "Invalid Credentials", token: null },
+        { status: 200 }
+      );
+    }
+
+    const user = await prisma.user.findFirst({
+      where: {
+        email: data.email,
+      },
+    });
+
+    if (!user) {
+      return NextResponse.json(
+        { error: true, message: "User not found", token: null },
+        { status: 200 }
+      );
+    }
+
+    const isMatch = await bcrypt.compare(data.password, user.password);
+
+    if (!isMatch) {
+      return NextResponse.json(
+        { error: true, message: "Invalid Credentials", token: null },
+        { status: 200 }
+      );
+    }
+    let bakery_;
+
+    const token = createToken(user.id, user.email);
+    if (!token) {
+      return NextResponse.json(
+        {
+          error: true,
+          message: "Server Error occured. Try again later",
+          token: null,
+        },
+        { status: 200 }
+      );
+    }
+    let profiles = [];
+    const employee = await prisma.employee.findFirst({
+      where: {
+        userId: user.id,
+      },
+      include: {
+        Bakery: true,
+      },
+    });
+
+    if (employee) {
+      profiles.push({
+        employee: {
+          id: employee.id,
+        },
+      });
+    }
+
+    const manager = await prisma.manager.findFirst({
+      where: {
+        userId: user.id,
+      },
+      include: {
+        Bakery: true,
+      },
+    });
+    if (manager) {
+      profiles.push({
+        manager: {
+          id: manager.id,
+        },
+      });
+    }
+
+    // Get Bakery from either Employee or Manager
+    const bakery = employee?.Bakery || manager?.Bakery;
+
+    return NextResponse.json(
+      {
+        error: false,
+        message: "Successfully logged In",
+        data: {
+          token: token,
+          user: {
+            name: user.name,
+            email: user.email,
+            id: user.id,
+            bakery: bakery,
+            profiles: profiles,
+          },
+        },
+      },
+      { status: 201 }
+    );
+  } catch (e) {
+    return NextResponse.json(
+      { error: true, message: "Something Went Wrong", token: null },
+      { status: 200 }
+    );
+  }
+}

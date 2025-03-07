@@ -6,17 +6,25 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "db:migrate": "prisma migrate dev --name",
+    "db:studio": "prisma studio"
   },
   "dependencies": {
+    "@prisma/client": "^6.4.1",
+    "bcryptjs": "^3.0.2",
+    "jsonwebtoken": "^9.0.2",
+    "next": "15.2.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "next": "15.2.0"
+    "zod": "^3.24.2"
   },
   "devDependencies": {
-    "typescript": "^5",
+    "@types/jsonwebtoken": "^9.0.9",
     "@types/node": "^20",
     "@types/react": "^19",
-    "@types/react-dom": "^19"
+    "@types/react-dom": "^19",
+    "prisma": "^6.4.1",
+    "typescript": "^5"
   }
 }

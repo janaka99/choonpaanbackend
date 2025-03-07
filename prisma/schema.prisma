@@ -1,0 +1,74 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+
+model User {
+  id    Int     @id @default(autoincrement())
+  email String  @unique
+  name  String
+  password String
+    createdAt             DateTime @default(now())
+  updatedAt             DateTime  @updatedAt @default(now())
+
+  Manager Manager[]
+  Employee Employee[]
+  Product Product[]
+}
+
+
+model Bakery {
+  id          Int        @id @default(autoincrement())
+  name        String
+  managerId   Int       @unique
+    createdAt             DateTime @default(now())
+  updatedAt             DateTime  @updatedAt @default(now())
+
+  Manager     Manager   @relation(fields: [managerId], references: [id])
+  Employee    Employee[]
+}
+
+model Manager {
+  id        Int     @id @default(autoincrement())
+  userId    Int
+  Bakery    Bakery?  
+    createdAt             DateTime @default(now())
+  updatedAt             DateTime  @updatedAt @default(now())
+
+  user      User    @relation(fields: [userId], references: [id])
+}
+
+model Employee {
+  id        Int     @id @default(autoincrement())
+  userId    Int
+  bakeryId  Int?   
+    createdAt             DateTime @default(now())
+  updatedAt             DateTime  @updatedAt @default(now())
+
+  Bakery    Bakery?  @relation(fields: [bakeryId], references: [id])
+  user      User    @relation(fields: [userId], references: [id])
+}
+
+model Product {
+    id        Int     @id @default(autoincrement())
+    name      String 
+    price     Int
+    stock     Int  @default(0)
+    sold      Int @default(0)
+    createdAt             DateTime @default(now())
+    updatedAt             DateTime  @updatedAt @default(now())
+
+    createdBy Int
+    CreatedBy      User    @relation(fields: [createdBy], references: [id])
+}
