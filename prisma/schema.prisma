@@ -19,12 +19,14 @@ model User {
   email String  @unique
   name  String
   password String
-    createdAt             DateTime @default(now())
+  createdAt             DateTime @default(now())
   updatedAt             DateTime  @updatedAt @default(now())
 
   Manager Manager[]
   Employee Employee[]
-  Product Product[]
+  Products Product[]
+  Orders Order[]
+  CurrentLocation CurrentLocation[]
 }
 
 
@@ -32,9 +34,13 @@ model Bakery {
   id          Int        @id @default(autoincrement())
   name        String
   managerId   Int       @unique
-    createdAt             DateTime @default(now())
+  createdAt             DateTime @default(now())
   updatedAt             DateTime  @updatedAt @default(now())
+  latitude    Decimal?
+  longitude    Decimal?
 
+  Products    Product[]
+  Orders    Order[]
   Manager     Manager   @relation(fields: [managerId], references: [id])
   Employee    Employee[]
 }
@@ -43,7 +49,7 @@ model Manager {
   id        Int     @id @default(autoincrement())
   userId    Int
   Bakery    Bakery?  
-    createdAt             DateTime @default(now())
+  createdAt             DateTime @default(now())
   updatedAt             DateTime  @updatedAt @default(now())
 
   user      User    @relation(fields: [userId], references: [id])
@@ -53,7 +59,7 @@ model Employee {
   id        Int     @id @default(autoincrement())
   userId    Int
   bakeryId  Int?   
-    createdAt             DateTime @default(now())
+  createdAt             DateTime @default(now())
   updatedAt             DateTime  @updatedAt @default(now())
 
   Bakery    Bakery?  @relation(fields: [bakeryId], references: [id])
@@ -63,12 +69,41 @@ model Employee {
 model Product {
     id        Int     @id @default(autoincrement())
     name      String 
-    price     Int
+    price      Decimal
+    bakeryId   Int?
+    userId   Int
     stock     Int  @default(0)
     sold      Int @default(0)
     createdAt             DateTime @default(now())
     updatedAt             DateTime  @updatedAt @default(now())
 
-    createdBy Int
-    CreatedBy      User    @relation(fields: [createdBy], references: [id])
+    Bakery    Bakery?  @relation(fields: [bakeryId], references: [id])
+    CreatedBy      User    @relation(fields: [userId], references: [id])
+    Orders  Order[]
+}
+
+model Order {
+    id        Int     @id @default(autoincrement())
+    name      String 
+    price      Decimal
+    bakeryId   Int?
+    seller   Int
+    sold      Int @default(0)
+    productId Int @default(1)
+    createdAt             DateTime @default(now())
+      latitude    Decimal?
+  longitude    Decimal?
+
+    Bakery    Bakery?  @relation(fields: [bakeryId], references: [id])
+    Seller      User    @relation(fields: [seller], references: [id])
+    Product      Product    @relation(fields: [productId], references: [id])
+}
+
+model CurrentLocation{
+  id        Int     @id @default(autoincrement())
+  latitude    Decimal
+  longitude    Decimal
+  name   String
+  userid Int
+  User User    @relation(fields: [userid], references: [id])
 }

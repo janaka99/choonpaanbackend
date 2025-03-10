@@ -11,23 +11,31 @@ export async function GET(req: NextRequest, res: NextApiResponse) {
       { status: 401 }
     );
   }
-
   try {
-    const products = await prisma.product.findMany({
+    const currentLocationRecord = await prisma.currentLocation.findFirst({
       where: {
-        userId: user.id,
-      },
-      orderBy: {
-        createdAt: "desc", // Sorts from newest to oldest
+        userid: user.id,
       },
     });
+
+    if (!currentLocationRecord) {
+      return NextResponse.json(
+        { error: true, message: "Location not  selected" },
+        { status: 200 }
+      );
+    }
+
     return NextResponse.json(
       {
         error: false,
-        message: "Product fetched successfull",
-        products: products,
+        message: "Location has been successfully updated",
+        location: JSON.stringify({
+          latitude: currentLocationRecord.latitude,
+          longitude: currentLocationRecord.longitude,
+          name: currentLocationRecord.name,
+        }),
       },
-      { status: 200 }
+      { status: 201 }
     );
   } catch (error) {
     return NextResponse.json(

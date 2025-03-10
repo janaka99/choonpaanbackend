@@ -2,6 +2,8 @@ import { prisma } from "@/lib/prisma";
 import { NextApiResponse } from "next";
 import { isLoggedIn } from "@/utils/auth";
 import { NextRequest, NextResponse } from "next/server";
+import { format, startOfDay, subDays, eachDayOfInterval } from "date-fns";
+import { toZonedTime } from "date-fns-tz";
 
 export async function GET(req: NextRequest, res: NextApiResponse) {
   const user = await isLoggedIn(req);
@@ -13,19 +15,23 @@ export async function GET(req: NextRequest, res: NextApiResponse) {
   }
 
   try {
-    const products = await prisma.product.findMany({
+    const sales = await prisma.order.findMany({
       where: {
-        userId: user.id,
-      },
-      orderBy: {
-        createdAt: "desc", // Sorts from newest to oldest
+        seller: user.id,
       },
     });
+
+    let totalSales = 0;
+
+    sales.forEach((sale) => {
+      totalSales += Number(sale.sold) * Number(sale.price);
+    });
+
     return NextResponse.json(
       {
         error: false,
-        message: "Product fetched successfull",
-        products: products,
+        message: "Sales fetched successfull",
+        sales: totalSales,
       },
       { status: 200 }
     );

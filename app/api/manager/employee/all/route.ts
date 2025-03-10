@@ -1,10 +1,10 @@
 import { prisma } from "@/lib/prisma";
 import { NextApiResponse } from "next";
-import { isLoggedIn } from "@/utils/auth";
+import { isMangerLoggedInWithBakery } from "@/utils/auth";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest, res: NextApiResponse) {
-  const user = await isLoggedIn(req);
+  const user = await isMangerLoggedInWithBakery(req);
   if (!user) {
     return NextResponse.json(
       { error: true, message: "Unauthorized" },
@@ -13,19 +13,20 @@ export async function GET(req: NextRequest, res: NextApiResponse) {
   }
 
   try {
-    const products = await prisma.product.findMany({
+    const employees = await prisma.employee.findMany({
       where: {
-        userId: user.id,
+        bakeryId: user.bakery.id,
       },
-      orderBy: {
-        createdAt: "desc", // Sorts from newest to oldest
+      include: {
+        user: true,
       },
     });
+    console.log(employees);
     return NextResponse.json(
       {
         error: false,
-        message: "Product fetched successfull",
-        products: products,
+        message: "Employees fetched successfull",
+        employees: employees,
       },
       { status: 200 }
     );

@@ -13,44 +13,9 @@ export async function POST(req: NextRequest, res: NextApiResponse) {
       { status: 401 }
     );
   }
-
-  const { name, price, stock } = await req.json();
+  const { location, orders } = await req.json();
   try {
-    const { success, data, error } = ProductSchema.safeParse({
-      name,
-      price,
-      stock,
-    });
-
-    if (!success) {
-      console.log(error);
-      return NextResponse.json(
-        { error: true, message: "Failed to add product" },
-        { status: 200 }
-      );
-    }
-
-    const product = await prisma.product.findFirst({
-      where: {
-        name: data.name,
-      },
-    });
-
-    if (product) {
-      return NextResponse.json(
-        { error: true, message: "Product already exists" },
-        { status: 200 }
-      );
-    }
-
-    const newProduct = await prisma.product.create({
-      data: {
-        name: data.name,
-        price: data.price,
-        stock: data.stock,
-        userId: user.id,
-      },
-    });
+    // NEED TO WRITE LOGIC HERE
 
     return NextResponse.json(
       {

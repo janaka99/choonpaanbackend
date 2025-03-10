@@ -1,31 +1,43 @@
 import { prisma } from "@/lib/prisma";
 import { NextApiResponse } from "next";
-import { isLoggedIn } from "@/utils/auth";
+import { isLoggedIn, isMangerLoggedInWithBakery } from "@/utils/auth";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest, res: NextApiResponse) {
   const user = await isLoggedIn(req);
   if (!user) {
     return NextResponse.json(
-      { error: true, message: "Unauthorized" },
+      { error: true, message: "Unauthorized Request" },
       { status: 401 }
     );
   }
 
   try {
-    const products = await prisma.product.findMany({
+    const sales = await prisma.order.findMany({
       where: {
-        userId: user.id,
+        seller: user.id,
       },
-      orderBy: {
-        createdAt: "desc", // Sorts from newest to oldest
+      select: {
+        sold: true,
+        price: true,
       },
     });
+
+    const totalSales = sales.reduce(
+      (acc, order) => acc + Number(order.sold) * Number(order.price),
+      0
+    );
+
+    const totalRevenue = (totalSales / 100) * 40;
+
     return NextResponse.json(
       {
         error: false,
-        message: "Product fetched successfull",
-        products: products,
+        message: "",
+        sales: {
+          totalSales: totalSales,
+          totalRevenue: totalRevenue,
+        },
       },
       { status: 200 }
     );

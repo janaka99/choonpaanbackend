@@ -16,7 +16,20 @@ export async function POST(req: NextRequest, res: NextResponse) {
     });
     if (!success) {
       return NextResponse.json(
-        { error: true, message: "Something Went Wrong", token: null },
+        { error: true, message: "Something Went Wrong", data: null },
+        { status: 200 }
+      );
+    }
+
+    const userHave = await prisma.user.findFirst({
+      where: {
+        email: email.toLowerCase(),
+      },
+    });
+
+    if (userHave) {
+      return NextResponse.json(
+        { error: true, message: "Email is already taken", data: null },
         { status: 200 }
       );
     }
@@ -28,32 +41,47 @@ export async function POST(req: NextRequest, res: NextResponse) {
       // Create the user
       const user = await prisma.user.create({
         data: {
-          email: data.email,
+          email: data.email.toLowerCase(),
           password: hashedPassword,
           name: data.name,
         },
       });
 
-      await prisma.employee.create({
+      const employee = await prisma.employee.create({
         data: {
           userId: user.id,
         },
       });
-      return user;
+      return { user, employee };
     });
 
-    const token = createToken(transaction.id, transaction.email);
+    const token = createToken(transaction.user.id, transaction.user.email);
 
     return NextResponse.json(
       {
         error: false,
         message: "Successfully registered the user",
-        token: token,
+        data: {
+          token: token,
+          user: {
+            name: transaction.user.name,
+            email: transaction.user.email,
+            id: transaction.user.id,
+            bakery: null,
+            profiles: [
+              {
+                employee: {
+                  id: transaction.employee.id,
+                },
+              },
+            ],
+          },
+        },
       },
       { status: 201 }
     );
   } catch (e) {
-    console.log("error ", e);
+    console.log(e);
     return NextResponse.json(
       { error: true, message: "Something Went Wrong", token: null },
       { status: 200 }

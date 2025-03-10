@@ -18,9 +18,14 @@ export async function GET(req: NextRequest, res: NextApiResponse) {
         userId: user.id,
       },
       orderBy: {
-        createdAt: "desc", // Sorts from newest to oldest
+        sold: "desc",
       },
     });
+
+    let highDemand = [];
+    let mediumDemand = [];
+    let lowDemand = [];
+
     return NextResponse.json(
       {
         error: false,
