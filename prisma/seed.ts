@@ -29,6 +29,44 @@ export const USERS = [
     name: "Alex",
     password: "$2b$10$WZ/4XVh3PY4Ce7y/t/F8veJEXKGfYyJ2.lhHpIeDe3nJtmKeMKqpi",
   },
+  // other drivers
+
+  {
+    id: 6,
+    email: "riley@gmail.com",
+    name: "Riley",
+    password: "$2b$10$WZ/4XVh3PY4Ce7y/t/F8veJEXKGfYyJ2.lhHpIeDe3nJtmKeMKqpi",
+  },
+  {
+    id: 8,
+    email: "doe@gmail.com",
+    name: "doe",
+    password: "$2b$10$WZ/4XVh3PY4Ce7y/t/F8veJEXKGfYyJ2.lhHpIeDe3nJtmKeMKqpi",
+  },
+  {
+    id: 9,
+    email: "lamar@gmail.com",
+    name: "lamar",
+    password: "$2b$10$WZ/4XVh3PY4Ce7y/t/F8veJEXKGfYyJ2.lhHpIeDe3nJtmKeMKqpi",
+  },
+];
+
+export const LIVE_LOCATION = [
+  {
+    latitude: 6.926147,
+    longitude: 79.986555,
+    userid: 9,
+  },
+  {
+    latitude: 6.926832,
+    longitude: 79.986925,
+    userid: 7,
+  },
+  {
+    latitude: 6.923551,
+    longitude: 79.986846,
+    userid: 8,
+  },
 ];
 
 export const BAKERIES = [
@@ -326,7 +364,7 @@ async function main() {
     //   data: USERS,
     // });
 
-    await prisma.$executeRaw`ALTER SEQUENCE "User_id_seq" RESTART WITH 6`;
+    await prisma.$executeRaw`ALTER SEQUENCE "User_id_seq" RESTART WITH 10`;
 
     // const manager = await prisma.manager.create({
     //   data: {
@@ -361,6 +399,8 @@ async function main() {
     //   data: ORDERS,
     // });
     await prisma.$executeRaw`ALTER SEQUENCE "Order_id_seq" RESTART WITH 15`;
+
+    await prisma.$executeRaw`ALTER SEQUENCE "LiveLocation_id_seq" RESTART WITH 10`;
   });
 
   console.log("Data has been inserted successfully!");

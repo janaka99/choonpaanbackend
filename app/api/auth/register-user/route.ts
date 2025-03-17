@@ -26,37 +26,43 @@ export async function POST(req: NextRequest, res: NextResponse) {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     // Start a transaction
-    const transaction = await prisma.$transaction(async (prisma) => {
-      // Create the user
-      const user = await prisma.user.create({
-        data: {
-          email: data.email,
-          password: hashedPassword,
-          name: data.name,
-        },
-      });
+    const transaction = await prisma.$transaction(
+      async (prisma) => {
+        // Create the user
+        const user = await prisma.user.create({
+          data: {
+            email: data.email.toLowerCase(),
+            password: hashedPassword,
+            name: data.name,
+          },
+        });
 
-      const bekry = await prisma.bakery.findUnique({
-        where: {
-          id: bakery_id,
-        },
-      });
+        const bekry = await prisma.bakery.findUnique({
+          where: {
+            id: Number(bakery_id),
+          },
+        });
 
-      if (!bekry) {
-        throw new Error("Bakery not found");
+        if (!bekry) {
+          throw new Error("Bakery not found");
+        }
+
+        // Update Manager with Bakery info (you can add this if necessary)
+        await prisma.employee.create({
+          data: {
+            userId: user.id,
+            bakeryId: Number(bakery_id),
+          },
+        });
+
+        // Return the created user (or you can return more if needed)
+        return user;
+      },
+      {
+        maxWait: 5000, // default: 2000
+        timeout: 10000,
       }
-
-      // Update Manager with Bakery info (you can add this if necessary)
-      await prisma.employee.create({
-        data: {
-          userId: user.id,
-          bakeryId: bakery_id,
-        },
-      });
-
-      // Return the created user (or you can return more if needed)
-      return user;
-    });
+    );
 
     return NextResponse.json(
       {
@@ -66,7 +72,6 @@ export async function POST(req: NextRequest, res: NextResponse) {
       { status: 201 }
     );
   } catch (e) {
-    console.log("error ", e);
     return NextResponse.json(
       { error: true, message: "Something Went Wrong", token: null },
       { status: 200 }

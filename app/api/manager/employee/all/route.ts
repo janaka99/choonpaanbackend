@@ -21,7 +21,6 @@ export async function GET(req: NextRequest, res: NextApiResponse) {
         user: true,
       },
     });
-    console.log(employees);
     return NextResponse.json(
       {
         error: false,

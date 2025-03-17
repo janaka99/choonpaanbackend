@@ -30,7 +30,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
         // Create the user
         const user = await prisma.user.create({
           data: {
-            email: data.email,
+            email: data.email.toLowerCase(),
             password: hashedPassword,
             name: data.name,
           },
@@ -88,6 +88,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
       {
         manager: {
           id: transaction.manager.id,
+          bakery: transaction.bakery,
         },
       },
       {

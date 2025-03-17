@@ -65,6 +65,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
       profiles.push({
         manager: {
           id: manager.id,
+          bakery: manager.Bakery,
         },
       });
     }

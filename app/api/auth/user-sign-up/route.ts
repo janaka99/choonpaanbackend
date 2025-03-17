@@ -37,23 +37,29 @@ export async function POST(req: NextRequest, res: NextResponse) {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     // Start a transaction
-    const transaction = await prisma.$transaction(async (prisma) => {
-      // Create the user
-      const user = await prisma.user.create({
-        data: {
-          email: data.email.toLowerCase(),
-          password: hashedPassword,
-          name: data.name,
-        },
-      });
+    const transaction = await prisma.$transaction(
+      async (prisma) => {
+        // Create the user
+        const user = await prisma.user.create({
+          data: {
+            email: data.email.toLowerCase(),
+            password: hashedPassword,
+            name: data.name,
+          },
+        });
 
-      const employee = await prisma.employee.create({
-        data: {
-          userId: user.id,
-        },
-      });
-      return { user, employee };
-    });
+        const employee = await prisma.employee.create({
+          data: {
+            userId: user.id,
+          },
+        });
+        return { user, employee };
+      },
+      {
+        maxWait: 5000, // default: 2000
+        timeout: 10000,
+      }
+    );
 
     const token = createToken(transaction.user.id, transaction.user.email);
 

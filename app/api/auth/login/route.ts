@@ -7,14 +7,13 @@ import { createToken } from "@/utils/createToken";
 export async function POST(req: NextRequest, res: NextResponse) {
   try {
     const { email, password } = await req.json();
-
     const { success, data } = LoginSchema.safeParse({
       email,
       password,
     });
     if (!success) {
       return NextResponse.json(
-        { error: true, message: "Invalid Credentials", token: null },
+        { error: true, message: "Email or password is incorrect", token: null },
         { status: 200 }
       );
     }
@@ -36,40 +35,23 @@ export async function POST(req: NextRequest, res: NextResponse) {
 
     if (!isMatch) {
       return NextResponse.json(
-        { error: true, message: "Invalid Credentials", token: null },
+        { error: true, message: "Email or password is incorrect", token: null },
         { status: 200 }
       );
     }
-    let bakery_;
 
     const token = createToken(user.id, user.email);
     if (!token) {
       return NextResponse.json(
         {
           error: true,
-          message: "Server Error occured. Try again later",
+          message: "Server error occured.Please try again later",
           token: null,
         },
         { status: 200 }
       );
     }
     let profiles = [];
-    const employee = await prisma.employee.findFirst({
-      where: {
-        userId: user.id,
-      },
-      include: {
-        Bakery: true,
-      },
-    });
-
-    if (employee) {
-      profiles.push({
-        employee: {
-          id: employee.id,
-        },
-      });
-    }
 
     const manager = await prisma.manager.findFirst({
       where: {
@@ -83,6 +65,24 @@ export async function POST(req: NextRequest, res: NextResponse) {
       profiles.push({
         manager: {
           id: manager.id,
+          bakery: manager.Bakery,
+        },
+      });
+    }
+
+    const employee = await prisma.employee.findFirst({
+      where: {
+        userId: user.id,
+      },
+      include: {
+        Bakery: true,
+      },
+    });
+
+    if (employee) {
+      profiles.push({
+        employee: {
+          id: employee.id,
         },
       });
     }
@@ -109,7 +109,11 @@ export async function POST(req: NextRequest, res: NextResponse) {
     );
   } catch (e) {
     return NextResponse.json(
-      { error: true, message: "Something Went Wrong", token: null },
+      {
+        error: true,
+        message: "Server error occured.Please try again later",
+        token: null,
+      },
       { status: 200 }
     );
   }

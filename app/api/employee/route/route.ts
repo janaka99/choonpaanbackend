@@ -38,16 +38,33 @@ export async function GET(req: NextRequest, res: NextApiResponse) {
       where: {
         latitude: { not: null },
         longitude: { not: null },
-        createdAt: {
-          gte: sevenDaysAgo,
-          lt: todayStart,
-        },
+        // createdAt: {
+        //   gte: sevenDaysAgo,
+        //   lt: todayStart,
+        // },
       },
       include: {
         Product: true,
       },
     });
+
+    const drivers = await prisma.liveLocation.findMany();
     const radius = RADIUS; // in meters
+
+    const driverWithintheRadius = drivers.filter((driver) => {
+      const distance = geoDistance
+        .between(
+          { lat: location.latitude, lon: location.longitude },
+          { lat: driver.latitude, lon: driver.longitude }
+        )
+        .human_readable();
+
+      if (distance.unit == "km") {
+        return distance.distance <= radius / 1000;
+      }
+      return distance.distance <= radius;
+    });
+    console.log(driverWithintheRadius);
 
     const ordersWithinRadius = orders.filter((order) => {
       const distance = geoDistance
@@ -56,16 +73,19 @@ export async function GET(req: NextRequest, res: NextApiResponse) {
           { lat: order.latitude, lon: order.longitude }
         )
         .human_readable();
+
       if (distance.unit == "km") {
         return distance.distance <= radius / 1000;
       }
       return distance.distance <= radius;
     });
+
     const demandItems = getMostSoldItems(ordersWithinRadius);
     const possibleRoutes = getPossibleRoutes(
       { latitude: location.latitude, longitude: location.longitude },
       ordersWithinRadius
     );
+
     const routesFromGoogle = await getRoutesFromGoogle(
       possibleRoutes,
       location
@@ -78,6 +98,7 @@ export async function GET(req: NextRequest, res: NextApiResponse) {
         orders: JSON.stringify(ordersWithinRadius),
         possibleRoutes: JSON.stringify(routesFromGoogle) || [],
         demandItems: JSON.stringify(demandItems) || [],
+        otherDrivers: JSON.stringify(driverWithintheRadius) || [],
         location: JSON.stringify({
           latitude: location.latitude,
           longitude: location.longitude,
