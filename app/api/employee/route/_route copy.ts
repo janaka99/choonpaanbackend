@@ -7,13 +7,9 @@ import { startOfDay, subDays } from "date-fns";
 import geoDistance from "geo-distance";
 import { RADIUS } from "@/constants";
 import { getPossibleRoutes } from "@/utils/getPossibleRoutsFromOrders";
-import {
-  getRoutesFromGoogle,
-  getRoutesFromGoogleOpenAI,
-} from "@/utils/getRoutesFromGoogle";
-import { GENERATE_ROUTES } from "@/lib/openai";
+import { getRoutesFromGoogle } from "@/utils/getRoutesFromGoogle";
 
-export async function GET(req: NextRequest, res: NextApiResponse) {
+export async function DELETE(req: NextRequest, res: NextApiResponse) {
   const user = await isLoggedIn(req);
   if (!user) {
     return NextResponse.json(
@@ -52,12 +48,6 @@ export async function GET(req: NextRequest, res: NextApiResponse) {
       },
     });
 
-    const products = await prisma.product.findMany({
-      where: {
-        userId: user.id,
-      },
-    });
-
     const drivers = await prisma.liveLocation.findMany();
     const radius = RADIUS; // in meters
 
@@ -74,7 +64,7 @@ export async function GET(req: NextRequest, res: NextApiResponse) {
       }
       return distance.distance <= radius;
     });
-    // console.log(driverWithintheRadius);
+    console.log(driverWithintheRadius);
 
     const ordersWithinRadius = orders.filter((order) => {
       const distance = geoDistance
@@ -90,38 +80,23 @@ export async function GET(req: NextRequest, res: NextApiResponse) {
       return distance.distance <= radius;
     });
 
-    const result = await GENERATE_ROUTES(
-      location,
-      ordersWithinRadius,
-      products
-    );
-
-    console.log("Route result ", result);
-
     const demandItems = getMostSoldItems(ordersWithinRadius);
     const possibleRoutes = getPossibleRoutes(
       { latitude: location.latitude, longitude: location.longitude },
       ordersWithinRadius
     );
-    // console.log("Possible routes ", possibleRoutes);
+
     const routesFromGoogle = await getRoutesFromGoogle(
       possibleRoutes,
       location
     );
-    let rt = result?.object.routes;
-    const routesFromGoogleOpenAI = await getRoutesFromGoogleOpenAI(
-      rt,
-      location
-    );
 
-    // console.log("Routes From Gooel ", routesFromGoogle);
-    // console.log("Routes From OpenAI ", routesFromGoogleOpenAI);
     return NextResponse.json(
       {
         error: false,
         message: "Product fetched successfull",
         orders: JSON.stringify(ordersWithinRadius),
-        possibleRoutes: JSON.stringify(routesFromGoogleOpenAI) || [],
+        possibleRoutes: JSON.stringify(routesFromGoogle) || [],
         demandItems: JSON.stringify(demandItems) || [],
         otherDrivers: JSON.stringify(driverWithintheRadius) || [],
         location: JSON.stringify({

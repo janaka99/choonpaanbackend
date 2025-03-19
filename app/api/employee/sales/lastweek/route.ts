@@ -61,7 +61,7 @@ export async function GET(req: NextRequest, res: NextApiResponse) {
         }
       }
     });
-
+    console.log(last7Days);
     return NextResponse.json(
       {
         error: false,

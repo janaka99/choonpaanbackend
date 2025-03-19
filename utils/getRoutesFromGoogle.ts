@@ -73,3 +73,55 @@ function getMostSoldItems(orders: any) {
     }))
     .sort((a, b) => b.totalSold - a.totalSold);
 }
+
+export const getRoutesFromGoogleOpenAI = async (
+  routes: any,
+  driverLocation: any
+) => {
+  try {
+    let returnArray: any[] = [];
+    console.log(routes.length);
+    for (let i = 0; i < routes.length; i++) {
+      if (routes[i].length === 0) {
+        continue;
+      }
+      const waypoints = routes[i].road.map((order: any) => ({
+        location: `${order.latitude},${order.longitude}`,
+        stopover: true,
+      }));
+      console.log(waypoints);
+      const directionsUrl = `https://maps.googleapis.com/maps/api/directions/json?origin=${
+        driverLocation.latitude
+      },${driverLocation.longitude}&destination=${
+        waypoints[waypoints.length - 1].location
+      }&waypoints=${waypoints
+        .map((wp: any) => wp.location)
+        .join("|")}&key=AIzaSyC1b4-xnb7a8Wfigq8yZGZ8IqkOshrEQ9c`;
+
+      const response = await fetch(directionsUrl);
+      const data = await response.json();
+      const as = {
+        orders: routes[i].demandItems,
+        route: data,
+      };
+
+      returnArray.push(as);
+    }
+
+    const routesArray = [];
+    if (returnArray.length > 0) {
+      for (let i = 0; i < returnArray.length; i++) {
+        // Ensure routes exist
+        const encodedPolyline =
+          returnArray[i].route.routes[0].overview_polyline.points;
+        routesArray.push({
+          route: encodedPolyline,
+          orderInsights: returnArray[i].orders,
+        });
+      }
+    }
+    return routesArray;
+  } catch (error) {
+    return null;
+  }
+};

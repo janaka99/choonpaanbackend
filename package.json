@@ -14,14 +14,17 @@
     "seed": "tsx prisma/seed.ts"
   },
   "dependencies": {
+    "@ai-sdk/openai": "^1.2.6",
     "@mapbox/polyline": "^1.2.1",
     "@prisma/client": "^6.4.1",
+    "ai": "^4.1.63",
     "bcryptjs": "^3.0.2",
     "date-fns": "^4.1.0",
     "date-fns-tz": "^3.2.0",
     "geo-distance": "^0.2.0",
     "geolib": "^3.3.4",
     "jsonwebtoken": "^9.0.2",
+    "ml-kmeans": "^6.0.0",
     "next": "15.2.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
