@@ -58,6 +58,13 @@ export async function GET(req: NextRequest, res: NextApiResponse) {
       },
     });
 
+    const journey = await prisma.journey.findFirst({
+      where: {
+        userid: user.id,
+        endAt: null,
+      },
+    });
+
     const drivers = await prisma.liveLocation.findMany();
     const radius = RADIUS; // in meters
 
@@ -96,8 +103,6 @@ export async function GET(req: NextRequest, res: NextApiResponse) {
       products
     );
 
-    console.log("Route result ", result);
-
     const demandItems = getMostSoldItems(ordersWithinRadius);
     const possibleRoutes = getPossibleRoutes(
       { latitude: location.latitude, longitude: location.longitude },
@@ -124,6 +129,7 @@ export async function GET(req: NextRequest, res: NextApiResponse) {
         possibleRoutes: JSON.stringify(routesFromGoogleOpenAI) || [],
         demandItems: JSON.stringify(demandItems) || [],
         otherDrivers: JSON.stringify(driverWithintheRadius) || [],
+        journey: JSON.stringify(journey) || null,
         location: JSON.stringify({
           latitude: location.latitude,
           longitude: location.longitude,

@@ -17,6 +17,9 @@ export async function GET(req: NextApiRequest) {
       where: {
         userid: user.id,
       },
+      orderBy: {
+        updatedAt: "desc", // Orders by newest first
+      },
     });
 
     return NextResponse.json(

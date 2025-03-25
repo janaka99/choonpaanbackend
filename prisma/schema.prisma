@@ -29,6 +29,7 @@ model User {
   CurrentLocation CurrentLocation[]
   LiveLocation LiveLocation[]
   Notification Notification[]
+  Journey Journey[]
 }
 
 
@@ -127,5 +128,15 @@ model LiveLocation{
   longitude    Decimal
   userid Int
   User User    @relation(fields: [userid], references: [id])
+}
+
+model Journey{
+  id              Int     @id @default(autoincrement())
+  route           Json 
+  userid          Int
+  User            User    @relation(fields: [userid], references: [id])
+  endAt           DateTime?
+  startedAt       DateTime  @updatedAt @default(now())
+  orderInsights   Json
 }
 
