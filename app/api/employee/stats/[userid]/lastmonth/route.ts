@@ -3,6 +3,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { isLoggedIn, isMangerLoggedInWithBakery } from "@/utils/auth";
 import { NextRequest, NextResponse } from "next/server";
 import { startOfDay, subDays } from "date-fns";
+import { calculateTotalSales } from "@/utils/calculateTotalSales";
 
 export async function GET(
   req: NextApiRequest,
@@ -26,6 +27,7 @@ export async function GET(
   try {
     const todayStart = startOfDay(new Date());
     const thirtyDaysAgo = subDays(todayStart, 30);
+    const prevthirtyDaysAgo = subDays(todayStart, 60);
 
     const sales = await prisma.order.findMany({
       where: {
@@ -34,6 +36,17 @@ export async function GET(
         createdAt: {
           gte: thirtyDaysAgo,
           lt: todayStart,
+        },
+      },
+    });
+
+    const prevthirtyDaysAgoSales = await prisma.order.findMany({
+      where: {
+        seller: Number(userid),
+        bakeryId: user.bakery.id,
+        createdAt: {
+          gte: prevthirtyDaysAgo,
+          lt: thirtyDaysAgo,
         },
       },
     });
@@ -84,11 +97,25 @@ export async function GET(
       }
     });
 
+    const last30dayssales = calculateTotalSales(sales);
+    const previousWeekTotal = calculateTotalSales(prevthirtyDaysAgoSales);
+
+    let differencePercentage = 0;
+    if (previousWeekTotal > 0) {
+      differencePercentage =
+        ((last30dayssales - previousWeekTotal) / previousWeekTotal) * 100;
+    } else if (last30dayssales > 0) {
+      differencePercentage = 100; // If no sales in the previous week, treat it as a 100% increase
+    }
+
     return NextResponse.json(
       {
         error: false,
         message: "",
         sales: last30Days,
+        differencePercentage: JSON.stringify(
+          parseFloat(differencePercentage.toFixed(2))
+        ),
       },
       { status: 200 }
     );

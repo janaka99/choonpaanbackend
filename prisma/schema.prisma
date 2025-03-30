@@ -109,7 +109,8 @@ model Notification{
   description    String
   isRead Boolean @default(false)
   userid Int
-    updatedAt             DateTime  @updatedAt @default(now())
+  updatedAt             DateTime  @updatedAt @default(now())
+  createdAt             DateTime @default(now())
   User User    @relation(fields: [userid], references: [id])
 }
 

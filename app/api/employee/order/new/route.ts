@@ -42,6 +42,7 @@ export async function POST(req: NextRequest, res: NextApiResponse) {
 
     const lowStockProducts = await prisma.product.findMany({
       where: {
+        userId: user.id,
         stock: {
           lt: 5,
         },

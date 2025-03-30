@@ -6,6 +6,7 @@ import { createToken } from "@/utils/createToken";
 
 export async function POST(req: NextRequest, res: NextResponse) {
   try {
+    // pass and validate request body
     const { email, password } = await req.json();
     const { success, data } = LoginSchema.safeParse({
       email,
@@ -18,9 +19,10 @@ export async function POST(req: NextRequest, res: NextResponse) {
       );
     }
 
+    // fecth user information from the database
     const user = await prisma.user.findFirst({
       where: {
-        email: data.email,
+        email: data.email.toLowerCase(),
       },
     });
 
@@ -30,7 +32,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
         { status: 200 }
       );
     }
-
+    // compare passwords
     const isMatch = await bcrypt.compare(data.password, user.password);
 
     if (!isMatch) {
@@ -98,7 +100,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
           token: token,
           user: {
             name: user.name,
-            email: user.email,
+            email: user.email.toLowerCase(),
             id: user.id,
             bakery: bakery,
             profiles: profiles,
@@ -111,7 +113,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
     return NextResponse.json(
       {
         error: true,
-        message: "Server error occured.Please try again later",
+        message: "An unexpected error occurred. Please try again later.",
         token: null,
       },
       { status: 200 }

@@ -3,6 +3,7 @@ import { NextApiResponse } from "next";
 import { isLoggedIn } from "@/utils/auth";
 import { NextRequest, NextResponse } from "next/server";
 import { startOfDay, subDays } from "date-fns";
+import { calculateTotalSales } from "@/utils/calculateTotalSales";
 
 export async function GET(req: NextRequest, res: NextApiResponse) {
   const user = await isLoggedIn(req);
@@ -16,6 +17,7 @@ export async function GET(req: NextRequest, res: NextApiResponse) {
   try {
     const todayStart = startOfDay(new Date());
     const sevenDaysAgo = subDays(todayStart, 7);
+    const fourteenDaysAgo = subDays(todayStart, 14);
 
     const sales = await prisma.order.findMany({
       where: {
@@ -26,6 +28,18 @@ export async function GET(req: NextRequest, res: NextApiResponse) {
         },
       },
     });
+
+    // Fetch sales for the previous 7 days
+    const previousWeekSales = await prisma.order.findMany({
+      where: {
+        seller: user.id,
+        createdAt: {
+          gte: fourteenDaysAgo,
+          lt: sevenDaysAgo,
+        },
+      },
+    });
+
     function getLast7Days() {
       const today = new Date();
       const last7Days = [];
@@ -61,12 +75,26 @@ export async function GET(req: NextRequest, res: NextApiResponse) {
         }
       }
     });
-    console.log(last7Days);
+
+    const lastWeekTotal = calculateTotalSales(sales);
+    const previousWeekTotal = calculateTotalSales(previousWeekSales);
+
+    let differencePercentage = 0;
+    if (previousWeekTotal > 0) {
+      differencePercentage =
+        ((lastWeekTotal - previousWeekTotal) / previousWeekTotal) * 100;
+    } else if (lastWeekTotal > 0) {
+      differencePercentage = 100; // If no sales in the previous week, treat it as a 100% increase
+    }
+
     return NextResponse.json(
       {
         error: false,
         message: "",
         sales: last7Days,
+        differencePercentage: JSON.stringify(
+          parseFloat(differencePercentage.toFixed(2))
+        ),
       },
       { status: 200 }
     );

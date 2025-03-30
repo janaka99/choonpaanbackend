@@ -51,7 +51,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
           },
         });
 
-        // Update Manager with Bakery info (you can add this if necessary)
+        // Update Manager with Bakery info
         const employee = await prisma.employee.create({
           data: {
             userId: user.id,
@@ -59,7 +59,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
           },
         });
 
-        // Return the created user (or you can return more if needed)
+        // Return the created user
         return {
           user: user,
           bakery: bakery,
@@ -101,7 +101,8 @@ export async function POST(req: NextRequest, res: NextResponse) {
     return NextResponse.json(
       {
         error: false,
-        message: "Successfully registered the user",
+        message:
+          "Account successfully created and logged in. Welcome to the platform!",
         data: {
           token: token,
           user: {
@@ -116,7 +117,6 @@ export async function POST(req: NextRequest, res: NextResponse) {
       { status: 201 }
     );
   } catch (e) {
-    console.log("error ", e);
     return NextResponse.json(
       { error: true, message: "Something Went Wrong", token: null },
       { status: 200 }
