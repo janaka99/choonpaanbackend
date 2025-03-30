@@ -1,5 +1,4 @@
 import { prisma } from "@/lib/prisma";
-import { NextApiResponse } from "next";
 import { z } from "zod";
 import { isLoggedIn } from "@/utils/auth";
 import { ProductSchema } from "@/schemas/product";

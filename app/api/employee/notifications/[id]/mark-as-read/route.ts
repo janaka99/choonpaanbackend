@@ -1,10 +1,9 @@
-import { NextApiRequest } from "next";
 import { isLoggedIn } from "@/utils/auth";
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
 export async function POST(
-  req: NextApiRequest,
+  req: any,
   { params: useridparam }: { params: Promise<{ id: string }> }
 ) {
   try {

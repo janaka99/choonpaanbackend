@@ -1,10 +1,9 @@
 import { prisma } from "@/lib/prisma";
-import { NextApiRequest } from "next";
 import { isMangerLoggedInWithBakery } from "@/utils/auth";
 import { NextResponse } from "next/server";
 
 export async function GET(
-  req: NextApiRequest,
+  req: any,
   { params }: { params: Promise<{ userid: string }> }
 ) {
   const { userid } = await params;

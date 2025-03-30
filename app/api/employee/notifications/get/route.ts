@@ -1,9 +1,8 @@
-import { NextApiRequest } from "next";
 import { isLoggedIn } from "@/utils/auth";
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
-export async function GET(req: NextApiRequest) {
+export async function GET(req: any) {
   try {
     const user = await isLoggedIn(req);
     if (!user) {
