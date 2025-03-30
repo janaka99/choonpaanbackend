@@ -1,11 +1,11 @@
 import { prisma } from "@/lib/prisma";
-import { NextApiRequest, NextApiResponse } from "next";
+import { NextApiResponse } from "next";
 import { z } from "zod";
 import { isLoggedIn } from "@/utils/auth";
 import { ProductSchema } from "@/schemas/product";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function POST(req: NextRequest, res: NextApiResponse) {
+export async function POST(req: NextRequest) {
   const user = await isLoggedIn(req);
   if (!user) {
     return NextResponse.json(

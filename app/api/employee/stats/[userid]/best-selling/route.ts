@@ -1,7 +1,7 @@
 import { prisma } from "@/lib/prisma";
-import { NextApiRequest, NextApiResponse } from "next";
-import { isLoggedIn, isMangerLoggedInWithBakery } from "@/utils/auth";
-import { NextRequest, NextResponse } from "next/server";
+import { NextApiRequest } from "next";
+import { isMangerLoggedInWithBakery } from "@/utils/auth";
+import { NextResponse } from "next/server";
 
 const isValidDate = (dateStr: string) => {
   const regex = /^\d{4}-\d{2}-\d{2}$/; // Simple YYYY-MM-DD format check

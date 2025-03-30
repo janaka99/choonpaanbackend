@@ -1,10 +1,10 @@
-import { ManagerSignUpSchema, UserSignUpSchema } from "@/schemas/user";
+import { UserSignUpSchema } from "@/schemas/user";
 import bcrypt from "bcryptjs";
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { createToken } from "@/utils/createToken";
 
-export async function POST(req: NextRequest, res: NextResponse) {
+export async function POST(req: NextRequest) {
   try {
     const { email, password, name, confirmPassword } = await req.json();
 

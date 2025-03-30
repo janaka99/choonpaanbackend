@@ -1,11 +1,10 @@
 import { prisma } from "@/lib/prisma";
-import { NextApiResponse } from "next";
 import { isMangerLoggedInWithBakery } from "@/utils/auth";
 import { NextRequest, NextResponse } from "next/server";
 import { startOfDay, subMonths } from "date-fns";
 import { calculateTotalSales } from "@/utils/calculateTotalSales";
 
-export async function GET(req: NextRequest, res: NextApiResponse) {
+export async function GET(req: NextRequest) {
   const user = await isMangerLoggedInWithBakery(req);
   if (!user) {
     return NextResponse.json(

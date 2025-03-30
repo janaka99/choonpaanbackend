@@ -1,10 +1,9 @@
-import { EmployeeRegisterSchema, ManagerSignUpSchema } from "@/schemas/user";
+import { EmployeeRegisterSchema } from "@/schemas/user";
 import bcrypt from "bcryptjs";
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { createToken } from "@/utils/createToken";
 
-export async function POST(req: NextRequest, res: NextResponse) {
+export async function POST(req: NextRequest) {
   try {
     const { email, password, name, bakery_id, confirmPassword } =
       await req.json();

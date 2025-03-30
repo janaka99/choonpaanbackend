@@ -1,11 +1,9 @@
-import { EmployeeRegisterSchema, ManagerSignUpSchema } from "@/schemas/user";
-import bcrypt from "bcryptjs";
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { createToken } from "@/utils/createToken";
 import jwt from "jsonwebtoken";
 
-export async function GET(req: NextRequest, res: NextResponse) {
+export async function GET(req: NextRequest) {
   try {
     const authHeader = req.headers.get("authorization"); // Get token from header
     if (!authHeader || !authHeader.startsWith("Bearer ")) {

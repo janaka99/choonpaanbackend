@@ -1,5 +1,4 @@
 import { prisma } from "@/lib/prisma";
-import { NextApiResponse } from "next";
 import { isLoggedIn } from "@/utils/auth";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -27,7 +26,7 @@ const getYesterday = () => {
   return date.toISOString().split("T")[0]; // Returns 'YYYY-MM-DD'
 };
 
-export async function GET(req: NextRequest, res: NextApiResponse) {
+export async function GET(req: NextRequest) {
   const user = await isLoggedIn(req);
   if (!user) {
     return NextResponse.json(

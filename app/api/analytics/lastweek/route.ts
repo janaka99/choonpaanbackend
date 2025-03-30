@@ -1,5 +1,4 @@
 import { prisma } from "@/lib/prisma";
-import { NextApiResponse } from "next";
 import { isLoggedIn } from "@/utils/auth";
 import { NextRequest, NextResponse } from "next/server";
 import { startOfDay, subDays } from "date-fns";

@@ -1,7 +1,7 @@
 import { prisma } from "@/lib/prisma";
-import { NextApiRequest, NextApiResponse } from "next";
-import { isLoggedIn, isMangerLoggedInWithBakery } from "@/utils/auth";
-import { NextRequest, NextResponse } from "next/server";
+import { NextApiRequest } from "next";
+import { isMangerLoggedInWithBakery } from "@/utils/auth";
+import { NextResponse } from "next/server";
 import { startOfDay, subDays } from "date-fns";
 import { calculateTotalSales } from "@/utils/calculateTotalSales";
 
