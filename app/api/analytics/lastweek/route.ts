@@ -7,7 +7,7 @@ import { startOfDay, subDays } from "date-fns";
 import geoDistance from "geo-distance";
 import { RADIUS } from "@/constants";
 
-export async function GET(req: NextRequest, res: NextApiResponse) {
+export async function GET(req: NextRequest) {
   const user = await isLoggedIn(req);
   if (!user) {
     return NextResponse.json(
