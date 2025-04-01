@@ -18,13 +18,14 @@ export async function POST(req: NextRequest) {
         { status: 500 }
       );
     }
-
+    // Check if the user has a current location record
     const currentLocationRecord = await prisma.currentLocation.findFirst({
       where: {
         userid: user.id,
       },
     });
     let location;
+    // If the user has a current location record, update it; otherwise, create a new one
     if (currentLocationRecord) {
       location = await prisma.currentLocation.update({
         where: {

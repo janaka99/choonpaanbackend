@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import { isLoggedIn, isMangerLoggedInWithBakery } from "@/utils/auth";
+import { isMangerLoggedInWithBakery } from "@/utils/auth";
 import { NextResponse } from "next/server";
 
 const isValidDate = (dateStr: string) => {
@@ -26,18 +26,9 @@ const getYesterday = () => {
   return date.toISOString().split("T")[0]; // Returns 'YYYY-MM-DD'
 };
 
-export async function GET(
-  req: any,
-  { params: useridparam }: { params: Promise<{ userid: string }> }
-) {
-  const { userid } = await useridparam;
-  if (!userid) {
-    return NextResponse.json(
-      { error: true, message: "Internal server error" },
-      { status: 500 }
-    );
-  }
-  const user = await isLoggedIn(req);
+export async function GET(req: any) {
+  console.log("Reached fuckers ");
+  const user = await isMangerLoggedInWithBakery(req);
   if (!user) {
     return NextResponse.json(
       { error: true, message: "Unauthorized" },
@@ -65,7 +56,6 @@ export async function GET(
     startDate = getThirtyDaysAgo();
     endDate = getYesterday();
   }
-  console.log(startDate);
   let startDateObj = new Date(startDate!);
   let endDateObj = new Date(endDate!);
   startDateObj.setHours(0, 0, 0, 0);
@@ -73,7 +63,7 @@ export async function GET(
   try {
     const orders = await prisma.order.findMany({
       where: {
-        seller: Number(userid),
+        bakeryId: user.bakery.id,
         createdAt: {
           gte: startDateObj!,
           lte: endDateObj!,
@@ -115,7 +105,7 @@ export async function GET(
       { status: 200 }
     );
   } catch (error) {
-    console.log(error);
+    console.log("Error occured ", error);
     return NextResponse.json(
       { error: true, message: "Internal server error" },
       { status: 500 }

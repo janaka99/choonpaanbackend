@@ -19,7 +19,7 @@ export async function POST(req: NextRequest) {
         { status: 500 }
       );
     }
-
+    // Check if the journey exists and belongs to the user
     await prisma.journey.update({
       where: {
         id: Number(id),

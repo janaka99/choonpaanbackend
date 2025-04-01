@@ -11,6 +11,7 @@ export async function GET(req: NextRequest) {
     );
   }
   try {
+    // Check if the user has a current location record
     const currentLocationRecord = await prisma.currentLocation.findFirst({
       where: {
         userid: user.id,

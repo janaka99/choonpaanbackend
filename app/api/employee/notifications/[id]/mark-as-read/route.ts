@@ -14,6 +14,7 @@ export async function POST(
         { status: 500 }
       );
     }
+    // Check if the user is logged in
     const user = await isLoggedIn(req);
     if (!user) {
       return NextResponse.json(
@@ -22,6 +23,7 @@ export async function POST(
       );
     }
 
+    // Check if the notification exists and belongs to the user
     await prisma.notification.update({
       where: {
         userid: user.id,

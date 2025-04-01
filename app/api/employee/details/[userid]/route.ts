@@ -13,6 +13,7 @@ export async function GET(
       { status: 500 }
     );
   }
+  // Check if the user is logged in as a manager with a bakery
   const user = await isMangerLoggedInWithBakery(req);
 
   if (!user) {
@@ -23,6 +24,7 @@ export async function GET(
   }
 
   try {
+    // Fetch employee details associated with the bakery
     const employee = await prisma.employee.findUnique({
       where: {
         id: Number(userid),

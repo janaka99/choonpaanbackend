@@ -2,10 +2,13 @@ import { prisma } from "@/lib/prisma";
 import { isLoggedIn } from "@/utils/auth";
 import { NextRequest, NextResponse } from "next/server";
 
+// this function checks if the date in correct format
 const isValidDate = (dateStr: string) => {
   const regex = /^\d{4}-\d{2}-\d{2}$/; // Simple YYYY-MM-DD format check
   return regex.test(dateStr) && !isNaN(new Date(dateStr).getTime());
 };
+
+// This function is used to format the date into a readable string
 function formatDate(inputDate: any) {
   const date = new Date(inputDate);
   const options = { year: "numeric", month: "short", day: "2-digit" };
@@ -14,12 +17,14 @@ function formatDate(inputDate: any) {
   return formattedDate.replace(",", "").slice(0, 7); // Remove the comma and keep the month and day
 }
 
+// This function is used to get the date 30 days ago in 'YYYY-MM-DD' format
 const getThirtyDaysAgo = () => {
   const date = new Date();
   date.setDate(date.getDate() - 30);
   return date.toISOString().split("T")[0]; // Returns'YYYY-MM-DD'
 };
 
+// This function is used to get yesterday's date in 'YYYY-MM-DD' format
 const getYesterday = () => {
   const date = new Date();
   date.setDate(date.getDate() - 1); // Yesterday
@@ -54,12 +59,13 @@ export async function GET(req: NextRequest) {
     startDate = getThirtyDaysAgo();
     endDate = getYesterday();
   }
-  console.log(startDate);
+
   let startDateObj = new Date(startDate!);
   let endDateObj = new Date(endDate!);
   startDateObj.setHours(0, 0, 0, 0);
   endDateObj.setHours(23, 59, 59, 999);
   try {
+    // Fetch orders for the logged-in user within the specified date range
     const orders = await prisma.order.findMany({
       where: {
         seller: user.id,
@@ -73,6 +79,7 @@ export async function GET(req: NextRequest) {
       },
     });
 
+    //  get the sales by product
     const salesByProduct = orders.reduce((acc: any, order) => {
       const { productId, sold, price, Product } = order;
 

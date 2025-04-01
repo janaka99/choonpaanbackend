@@ -10,8 +10,10 @@ export async function POST(req: NextRequest) {
       { status: 401 }
     );
   }
+  // get the order informations from the user
   const { location, orders, user: loggedUser } = await req.json();
   try {
+    // Format the order in the required structure to save it in the database
     const newOrders = orders.map((order: any) => ({
       name: order.name,
       price: Number(order.price),
@@ -23,12 +25,12 @@ export async function POST(req: NextRequest) {
       longitude: location.longitude,
     }));
 
-    console.log(newOrders);
-
+    // save the order in the database
     const addedProducts = await prisma.order.createMany({
       data: newOrders,
     });
 
+    // update the stocks after order placed
     const updateStockPromises = orders.map((order: any) =>
       prisma.product.update({
         where: { id: Number(order.productId) },
@@ -37,6 +39,7 @@ export async function POST(req: NextRequest) {
     );
     await Promise.all(updateStockPromises);
 
+    // after update the stock find the low stock products ( stocks below 5)
     const lowStockProducts = await prisma.product.findMany({
       where: {
         userId: user.id,
@@ -49,6 +52,7 @@ export async function POST(req: NextRequest) {
       },
     });
 
+    // if there are low stock products, create a notification for the user
     if (lowStockProducts.length > 0) {
       const productNames = lowStockProducts
         .map((product) => product.name)

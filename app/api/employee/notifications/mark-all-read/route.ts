@@ -11,7 +11,7 @@ export async function POST(req: any) {
         { status: 401 }
       );
     }
-
+    //  mark all notifications as read
     await prisma.notification.updateMany({
       where: {
         userid: user.id,

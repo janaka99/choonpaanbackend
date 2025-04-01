@@ -12,6 +12,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    // reset the all products stock to 0
     await prisma.product.updateMany({
       where: {
         userId: user.id,

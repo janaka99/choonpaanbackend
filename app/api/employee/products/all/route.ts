@@ -12,12 +12,13 @@ export async function GET(req: NextRequest) {
   }
 
   try {
+    // get all the products belongs to particular  user
     const products = await prisma.product.findMany({
       where: {
         userId: user.id,
       },
       orderBy: {
-        createdAt: "desc", // Sorts from newest to oldest
+        createdAt: "desc",
       },
     });
     return NextResponse.json(

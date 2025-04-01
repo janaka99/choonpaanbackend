@@ -6,6 +6,7 @@ import { createToken } from "@/utils/createToken";
 
 export async function POST(req: NextRequest) {
   try {
+    // Parse and validate request body
     const { email, password, name, bakery_name, confirmPassword } =
       await req.json();
     const { success, data } = ManagerSignUpSchema.safeParse({
@@ -21,6 +22,7 @@ export async function POST(req: NextRequest) {
         { status: 200 }
       );
     }
+
     // Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -51,7 +53,7 @@ export async function POST(req: NextRequest) {
           },
         });
 
-        // Update Manager with Bakery info
+        // Create Employee record
         const employee = await prisma.employee.create({
           data: {
             userId: user.id,
@@ -59,7 +61,7 @@ export async function POST(req: NextRequest) {
           },
         });
 
-        // Return the created user
+        // Return the created entities
         return {
           user: user,
           bakery: bakery,
@@ -68,11 +70,12 @@ export async function POST(req: NextRequest) {
         };
       },
       {
-        maxWait: 5000, // default: 2000
-        timeout: 10000,
+        maxWait: 5000, // Maximum wait time for transaction
+        timeout: 10000, // Transaction timeout
       }
     );
 
+    // Generate token for the user
     const token = createToken(transaction.user.id, transaction.user.email);
     if (!token) {
       return NextResponse.json(
@@ -84,6 +87,8 @@ export async function POST(req: NextRequest) {
         { status: 200 }
       );
     }
+
+    // Prepare profiles data
     let profiles = [
       {
         manager: {
@@ -98,6 +103,7 @@ export async function POST(req: NextRequest) {
       },
     ];
 
+    // Return success response
     return NextResponse.json(
       {
         error: false,
@@ -117,6 +123,7 @@ export async function POST(req: NextRequest) {
       { status: 201 }
     );
   } catch (e) {
+    // Handle errors
     return NextResponse.json(
       { error: true, message: "Something Went Wrong", token: null },
       { status: 200 }

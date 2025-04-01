@@ -11,7 +11,7 @@ export async function GET(req: any) {
         { status: 401 }
       );
     }
-
+    // get the unread notifications count belongs to user
     const notificationCount = await prisma.notification.count({
       where: {
         userid: user.id,

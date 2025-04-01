@@ -12,9 +12,10 @@ export async function POST(req: NextRequest) {
       { status: 401 }
     );
   }
-
+  // get the name, price and stock from the user
   const { name, price, stock } = await req.json();
   try {
+    // validate the name , price and stock
     const { success, data, error } = ProductSchema.safeParse({
       name,
       price,
@@ -22,26 +23,27 @@ export async function POST(req: NextRequest) {
     });
 
     if (!success) {
-      console.log(error);
       return NextResponse.json(
         { error: true, message: "Failed to add product" },
         { status: 200 }
       );
     }
 
+    //  find the products with same name
     const product = await prisma.product.findFirst({
       where: {
+        userId: user.id,
         name: data.name,
       },
     });
-
+    // if products with same name exists. informa the user and Product already exists in the database
     if (product) {
       return NextResponse.json(
         { error: true, message: "Product already exists" },
         { status: 200 }
       );
     }
-
+    // IF no products with that name found, Create new product with that name
     const newProduct = await prisma.product.create({
       data: {
         name: data.name,
@@ -50,17 +52,15 @@ export async function POST(req: NextRequest) {
         userId: user.id,
       },
     });
-
+    // if product is created successfully, inform the user
     return NextResponse.json(
       {
         error: false,
         message: "Product created successfully",
-        // product: newProduct,
       },
       { status: 201 }
     );
   } catch (error) {
-    console.log(error);
     if (error instanceof z.ZodError) {
       return NextResponse.json(
         {

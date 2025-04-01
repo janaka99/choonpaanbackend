@@ -11,7 +11,7 @@ export async function GET(req: any) {
         { status: 401 }
       );
     }
-
+    // find all the notifications belongs to user
     const notifications = await prisma.notification.findMany({
       where: {
         userid: user.id,

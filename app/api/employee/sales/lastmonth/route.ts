@@ -14,10 +14,14 @@ export async function GET(req: NextRequest) {
   }
 
   try {
+    // get the today's date
     const todayStart = startOfDay(new Date());
+    // get the date 3o days ago
     const thirtyDaysAgo = subDays(todayStart, 30);
+    // get the date 60 days ago
     const prevthirtyDaysAgo = subDays(todayStart, 60);
 
+    // find last 30 days orders belongs to the user
     const sales = await prisma.order.findMany({
       where: {
         seller: user.id,
@@ -28,6 +32,7 @@ export async function GET(req: NextRequest) {
       },
     });
 
+    // Find the sales between 30 and 60 days ago for the user
     const prevthirtyDaysAgoSales = await prisma.order.findMany({
       where: {
         seller: user.id,

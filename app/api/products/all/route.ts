@@ -12,6 +12,7 @@ export async function GET(req: NextRequest) {
   }
 
   try {
+    //  find the products belongs to the user
     const products = await prisma.product.findMany({
       where: {
         userId: user.id,
@@ -20,6 +21,7 @@ export async function GET(req: NextRequest) {
         createdAt: "desc",
       },
     });
+    // return the products to user
     return NextResponse.json(
       {
         error: false,

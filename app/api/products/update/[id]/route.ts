@@ -31,7 +31,7 @@ export async function POST(
         { status: 401 }
       );
     }
-
+    // get the name, price and stock from the u
     const { name, price, stock, id } = await req.json();
 
     const { success, data, error } = ProductSchema.safeParse({
@@ -67,7 +67,7 @@ export async function POST(
         { status: 200 }
       );
     }
-
+    // update the product with the new name, price and stock
     const updatedProduct = await prisma.product.update({
       where: {
         id: id,

@@ -5,6 +5,7 @@ import jwt from "jsonwebtoken";
 
 export async function GET(req: NextRequest) {
   try {
+    // Get the authorization header from the request
     const authHeader = req.headers.get("authorization"); // Get token from header
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
       return NextResponse.json(
@@ -13,6 +14,7 @@ export async function GET(req: NextRequest) {
       );
     }
 
+    // Extract the token from the authorization header
     const token = authHeader.split(" ")[1]; // Extract token
     const decoded = jwt.verify(
       token,
@@ -25,14 +27,17 @@ export async function GET(req: NextRequest) {
       );
     }
 
+    // Extract userId from the decoded token
     const userid = decoded.userId;
 
+    // Fetch user information from the database using the userId
     const user = await prisma.user.findUnique({
       where: {
         id: parseInt(userid),
       },
     });
 
+    // If no user is found, return an error response
     if (!user) {
       return NextResponse.json(
         { error: true, message: "Something Went Wrong", token: "null" },
@@ -40,6 +45,7 @@ export async function GET(req: NextRequest) {
       );
     }
 
+    // Generate a new authentication token for the user
     const newToken = createToken(user.id, user.email); // Create new token
 
     if (!newToken) {
@@ -50,6 +56,7 @@ export async function GET(req: NextRequest) {
     }
 
     let profiles = [];
+    // Fetch manager and employee information from the database
     const manager = await prisma.manager.findFirst({
       where: { userId: user.id },
       include: { Bakery: true },
@@ -83,6 +90,7 @@ export async function GET(req: NextRequest) {
       });
     }
 
+    // Get the bakery information from either employee or manager
     const bakery = employee?.Bakery || manager?.Bakery;
 
     return NextResponse.json(

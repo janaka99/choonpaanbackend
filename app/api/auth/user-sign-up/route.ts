@@ -6,8 +6,8 @@ import { createToken } from "@/utils/createToken";
 
 export async function POST(req: NextRequest) {
   try {
+    // Parse and validate the incoming request body using the schema
     const { email, password, name, confirmPassword } = await req.json();
-
     const { success, data } = UserSignUpSchema.safeParse({
       email,
       name,
@@ -21,6 +21,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    // Check if a user with the same email already exists
     const userHave = await prisma.user.findFirst({
       where: {
         email: email.toLowerCase(),
@@ -33,13 +34,14 @@ export async function POST(req: NextRequest) {
         { status: 200 }
       );
     }
-    // Hash the password
+
+    // Hash the password for secure storage
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Start a transaction
+    // Start a transaction to create both user and employee records
     const transaction = await prisma.$transaction(
       async (prisma) => {
-        // Create the user
+        // Create the user record
         const user = await prisma.user.create({
           data: {
             email: data.email.toLowerCase(),
@@ -48,6 +50,7 @@ export async function POST(req: NextRequest) {
           },
         });
 
+        // Create the associated employee record
         const employee = await prisma.employee.create({
           data: {
             userId: user.id,
@@ -56,13 +59,15 @@ export async function POST(req: NextRequest) {
         return { user, employee };
       },
       {
-        maxWait: 5000, // default: 2000
-        timeout: 10000,
+        maxWait: 5000, // Maximum wait time for the transaction
+        timeout: 10000, // Timeout for the transaction
       }
     );
 
+    // Generate a token for the newly created user
     const token = createToken(transaction.user.id, transaction.user.email);
 
+    // Return a success response with the user and token details
     return NextResponse.json(
       {
         error: false,
@@ -87,7 +92,6 @@ export async function POST(req: NextRequest) {
       { status: 201 }
     );
   } catch (e) {
-    console.log(e);
     return NextResponse.json(
       { error: true, message: "Something Went Wrong", token: null },
       { status: 200 }

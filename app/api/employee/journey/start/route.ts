@@ -14,8 +14,8 @@ export async function POST(req: NextRequest) {
   try {
     const { journey } = await req.json();
 
+    //  get the journey information from the user
     if (!journey) {
-      console.log("Reached hdere");
       return NextResponse.json(
         { error: true, message: "Something Went Wrong. Try again later" },
         { status: 500 }
@@ -26,7 +26,7 @@ export async function POST(req: NextRequest) {
       route: myJourney.route,
       orderInsights: myJourney.orderInsights,
     });
-    console.log(myJourney);
+
     if (!success) {
       console.log(error);
       return NextResponse.json(
@@ -34,7 +34,7 @@ export async function POST(req: NextRequest) {
         { status: 200 }
       );
     }
-
+    // Check if the user already has an ongoing journey
     const startedJourneys = await prisma.journey.findMany({
       where: {
         userid: user.id,
@@ -42,6 +42,7 @@ export async function POST(req: NextRequest) {
       },
     });
 
+    // If there are ongoing journeys, return an error response
     if (startedJourneys.length > 0) {
       return NextResponse.json(
         {
@@ -52,6 +53,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    // Create a new journey for the user
     const createdJourney = await prisma.journey.create({
       data: {
         route: data.route,

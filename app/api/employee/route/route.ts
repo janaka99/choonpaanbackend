@@ -5,11 +5,7 @@ import { startOfDay, subDays } from "date-fns";
 // @ts-ignore
 import geoDistance from "geo-distance";
 import { RADIUS } from "@/constants";
-import { getPossibleRoutes } from "@/utils/getPossibleRoutsFromOrders";
-import {
-  getRoutesFromGoogle,
-  getRoutesFromGoogleOpenAI,
-} from "@/utils/getRoutesFromGoogle";
+import { getRoutesFromGoogleOpenAI } from "@/utils/getRoutesFromGoogle";
 import { GENERATE_ROUTES } from "@/lib/openai";
 
 export async function GET(req: NextRequest) {
@@ -22,6 +18,7 @@ export async function GET(req: NextRequest) {
   }
 
   try {
+    // get the current location of the user
     const location = await prisma.currentLocation.findFirst({
       where: { userid: user.id },
     });
@@ -33,10 +30,13 @@ export async function GET(req: NextRequest) {
       );
     }
 
+    // get the today's date
     const todayStart = startOfDay(new Date());
 
+    // get the date 7 days ago
     const sevenDaysAgo = subDays(todayStart, 7);
 
+    // find the all the orders last week belongs to the user
     const orders = await prisma.order.findMany({
       where: {
         latitude: { not: null },
@@ -51,12 +51,14 @@ export async function GET(req: NextRequest) {
       },
     });
 
+    // find the all the products belongs to the user
     const products = await prisma.product.findMany({
       where: {
         userId: user.id,
       },
     });
 
+    // find  started journey of the user
     const journey = await prisma.journey.findFirst({
       where: {
         userid: user.id,
@@ -64,9 +66,11 @@ export async function GET(req: NextRequest) {
       },
     });
 
+    // find the neareset drivers
     const drivers = await prisma.liveLocation.findMany();
-    const radius = RADIUS; // in meters
+    const radius = RADIUS; // in meters in this case  ( 10,000m )
 
+    // filtered the drivers withing 10Km range
     const driverWithintheRadius = drivers.filter((driver) => {
       const distance = geoDistance
         .between(
@@ -82,6 +86,7 @@ export async function GET(req: NextRequest) {
     });
     // console.log(driverWithintheRadius);
 
+    // filter orders within 10Km ( 10,000m ) range
     const ordersWithinRadius = orders.filter((order) => {
       const distance = geoDistance
         .between(
@@ -96,37 +101,26 @@ export async function GET(req: NextRequest) {
       return distance.distance <= radius;
     });
 
+    // this function used to generated possible routes using AI
     const result = await GENERATE_ROUTES(
       location,
       ordersWithinRadius,
       products
     );
 
-    const demandItems = getMostSoldItems(ordersWithinRadius);
-    const possibleRoutes = getPossibleRoutes(
-      { latitude: location.latitude, longitude: location.longitude },
-      ordersWithinRadius
-    );
-    // console.log("Possible routes ", possibleRoutes);
-    const routesFromGoogle = await getRoutesFromGoogle(
-      possibleRoutes,
-      location
-    );
     let rt = result?.object.routes;
+    // this function converts those routes to data that google map api can read
     const routesFromGoogleOpenAI = await getRoutesFromGoogleOpenAI(
       rt,
       location
     );
 
-    // console.log("Routes From Gooel ", routesFromGoogle);
-    // console.log("Routes From OpenAI ", routesFromGoogleOpenAI);
     return NextResponse.json(
       {
         error: false,
         message: "Product fetched successfull",
         orders: JSON.stringify(ordersWithinRadius),
         possibleRoutes: JSON.stringify(routesFromGoogleOpenAI) || [],
-        demandItems: JSON.stringify(demandItems) || [],
         otherDrivers: JSON.stringify(driverWithintheRadius) || [],
         journey: JSON.stringify(journey) || null,
         location: JSON.stringify({
@@ -145,29 +139,79 @@ export async function GET(req: NextRequest) {
   }
 }
 
-function getMostSoldItems(orders: any) {
-  const productSales: {
-    [key: string]: { productId: string; name: string; totalSold: number };
-  } = {};
+// function getMostSoldItems(orders: any) {
+//   const productSales: {
+//     [key: string]: { productId: string; name: string; totalSold: number };
+//   } = {};
 
-  orders.forEach((order: any) => {
-    const { productId, sold, Product } = order;
-    if (!productSales[productId]) {
-      productSales[productId] = { productId, name: Product.name, totalSold: 0 };
-    }
-    productSales[productId].totalSold += sold;
-  });
+//   orders.forEach((order: any) => {
+//     const { productId, sold, Product } = order;
+//     if (!productSales[productId]) {
+//       productSales[productId] = { productId, name: Product.name, totalSold: 0 };
+//     }
+//     productSales[productId].totalSold += sold;
+//   });
 
-  return Object.values(productSales)
-    .filter((product) => product.totalSold > 0)
-    .map((product) => ({
-      ...product,
-      demand:
-        product.totalSold > 17
-          ? "High"
-          : product.totalSold > 10
-          ? "Medium"
-          : "Low",
-    }))
-    .sort((a, b) => b.totalSold - a.totalSold);
-}
+//   return Object.values(productSales)
+//     .filter((product) => product.totalSold > 0)
+//     .map((product) => ({
+//       ...product,
+//       demand:
+//         product.totalSold > 17
+//           ? "High"
+//           : product.totalSold > 10
+//           ? "Medium"
+//           : "Low",
+//     }))
+//     .sort((a, b) => b.totalSold - a.totalSold);
+// }
+
+// export const getRoutesFromGoogleOpenAI = async (
+//   routes: any,
+//   driverLocation: any
+// ) => {
+//   try {
+//     let returnArray: any[] = [];
+//     for (let i = 0; i < routes.length; i++) {
+//       if (routes[i].length === 0) {
+//         continue;
+//       }
+//       const waypoints = routes[i].road.map((order: any) => ({
+//         location: `${order.latitude},${order.longitude}`,
+//         stopover: true,
+//       }));
+//       const directionsUrl = `https://maps.googleapis.com/maps/api/directions/json?origin=${
+//         driverLocation.latitude
+//       },${driverLocation.longitude}&destination=${
+//         waypoints[waypoints.length - 1].location
+//       }&waypoints=${waypoints
+//         .map((wp: any) => wp.location)
+//         .join("|")}&key=AIzaSyC1b4-xnb7a8Wfigq8yZGZ8IqkOshrEQ9c`;
+
+//       const response = await fetch(directionsUrl);
+//       const data = await response.json();
+//       const as = {
+//         orders: routes[i].demandItems,
+//         route: data,
+//       };
+
+//       returnArray.push(as);
+//     }
+
+//     const routesArray = [];
+//     if (returnArray.length > 0) {
+//       for (let i = 0; i < returnArray.length; i++) {
+//         // Ensure routes exist
+//         const encodedPolyline =
+//           returnArray[i].route.routes[0].overview_polyline.points;
+//         routesArray.push({
+//           route: encodedPolyline,
+//           orderInsights: returnArray[i].orders,
+//         });
+//       }
+//     }
+//     return routesArray;
+//   } catch (error) {
+//     return null;
+//   }
+// };
