@@ -85,7 +85,7 @@ export async function GET(req: NextRequest) {
     } else if (lastWeekTotal > 0) {
       differencePercentage = 100; // If no sales in the previous week, treat it as a 100% increase
     }
-
+    console.log(last7Days)
     return NextResponse.json(
       {
         error: false,

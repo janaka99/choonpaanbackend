@@ -18,6 +18,7 @@
     "@ai-sdk/openai": "^1.2.6",
     "@mapbox/polyline": "^1.2.1",
     "@prisma/client": "^6.4.1",
+    "@tailwindcss/postcss": "^4.1.1",
     "ai": "^4.1.63",
     "bcryptjs": "^3.0.2",
     "date-fns": "^4.1.0",
@@ -25,10 +26,13 @@
     "geo-distance": "^0.2.0",
     "geolib": "^3.3.4",
     "jsonwebtoken": "^9.0.2",
+    "lucide-react": "^0.487.0",
     "ml-kmeans": "^6.0.0",
     "next": "15.2.0",
+    "postcss": "^8.5.3",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "tailwindcss": "^4.1.1",
     "zod": "^3.24.2"
   },
   "devDependencies": {

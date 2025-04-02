@@ -49,8 +49,49 @@ export const USERS = [
     name: "lamar",
     password: "$2b$10$WZ/4XVh3PY4Ce7y/t/F8veJEXKGfYyJ2.lhHpIeDe3nJtmKeMKqpi",
   },
+  { id: 10, email: "newlankabakers@gmail.com", name: "Peshali", password: "$2b$10$eBj.BXCQ8Z8X4OPVfgbvf.e6zKxoyg42IW45QG0KSektWxGpBuw8q" },
+  { id: 11, email: "sethumalibakers@gmail.com", name: "Sethumali", password: "$2b$10$eBj.BXCQ8Z8X4OPVfgbvf.e6zKxoyg42IW45QG0KSektWxGpBuw8q" },
+  { id: 12, email: "goldenbrownbakers@gmail.com", name: "James", password: "$2b$10$eBj.BXCQ8Z8X4OPVfgbvf.e6zKxoyg42IW45QG0KSektWxGpBuw8q" },
+  { id: 13, email: "sasiribakers@gmail.com", name: "Sasiri", password: "$2b$10$eBj.BXCQ8Z8X4OPVfgbvf.e6zKxoyg42IW45QG0KSektWxGpBuw8q" },
+  { id: 14, email: "nipunabakery@gmail.com", name: "Nipuna", password: "$2b$10$eBj.BXCQ8Z8X4OPVfgbvf.e6zKxoyg42IW45QG0KSektWxGpBuw8q" },
+  { id: 15, email: "wasanabakers@gmail.com", name: "Wasana", password: "$2b$10$eBj.BXCQ8Z8X4OPVfgbvf.e6zKxoyg42IW45QG0KSektWxGpBuw8q" },
+  { id: 16, email: "dilshanbakers@gmail.com", name: "Dilshan", password: "$2b$10$eBj.BXCQ8Z8X4OPVfgbvf.e6zKxoyg42IW45QG0KSektWxGpBuw8q" },
+  { id: 17, email: "shanthibakery@gmail.com", name: "Shanthi", password: "$2b$10$eBj.BXCQ8Z8X4OPVfgbvf.e6zKxoyg42IW45QG0KSektWxGpBuw8q" },
+  { id: 18, email: "piumibakers@gmail.com", name: "Piumi", password: "$2b$10$eBj.BXCQ8Z8X4OPVfgbvf.e6zKxoyg42IW45QG0KSektWxGpBuw8q" },
+  { id: 19, email: "rathnabakers@gmail.com", name: "Rathna", password: "$2b$10$eBj.BXCQ8Z8X4OPVfgbvf.e6zKxoyg42IW45QG0KSektWxGpBuw8q" },
+  { id: 20, email: "sumudubakers@gmail.com", name: "Sumudu", password: "$2b$10$eBj.BXCQ8Z8X4OPVfgbvf.e6zKxoyg42IW45QG0KSektWxGpBuw8q" },
+  { id: 21, email: "madushabakery@gmail.com", name: "Madusha", password: "$2b$10$eBj.BXCQ8Z8X4OPVfgbvf.e6zKxoyg42IW45QG0KSektWxGpBuw8q" },
+
+  { id: 22, email: "dinesh1@gmail.com", name: "Dinesh Cooray", password: "$2b$10$B6JQNeTMZpJwU4ZilfJz1eEccrXTquJHNQuzJljKz7XIaTpaIAi3W" },
+  { id: 23, email: "suresh2@gmail.com", name: "Suresh Menheewa", password: "$2b$10$B6JQNeTMZpJwU4ZilfJz1eEccrXTquJHNQuzJljKz7XIaTpaIAi3W" },
+  { id: 24, email: "sarath3@gmail.com", name: "Sarath", password: "$2b$10$B6JQNeTMZpJwU4ZilfJz1eEccrXTquJHNQuzJljKz7XIaTpaIAi3W" },
+  { id: 25, email: "lakshan4@gmail.com", name: "Lakshan Silva", password: "$2b$10$B6JQNeTMZpJwU4ZilfJz1eEccrXTquJHNQuzJljKz7XIaTpaIAi3W" },
+  { id: 26, email: "sarath5@gmail.com", name: "Sarath Rodrigo", password: "$2b$10$B6JQNeTMZpJwU4ZilfJz1eEccrXTquJHNQuzJljKz7XIaTpaIAi3W" },
+  { id: 27, email: "kasun6@gmail.com", name: "Kasun Perera", password: "$2b$10$B6JQNeTMZpJwU4ZilfJz1eEccrXTquJHNQuzJljKz7XIaTpaIAi3W" },
+  { id: 28, email: "lakshan8@gmail.com", name: "Lakshan Fernando", password: "$2b$10$B6JQNeTMZpJwU4ZilfJz1eEccrXTquJHNQuzJljKz7XIaTpaIAi3W" },
+  { id: 29, email: "lakshan9@gmail.com", name: "Lakshan", password: "$2b$10$B6JQNeTMZpJwU4ZilfJz1eEccrXTquJHNQuzJljKz7XIaTpaIAi3W" },
+  { id: 30, email: "rohan10@gmail.com", name: "Rohan Peiris", password: "$2b$10$B6JQNeTMZpJwU4ZilfJz1eEccrXTquJHNQuzJljKz7XIaTpaIAi3W" },
+  { id: 31, email: "tharindu11@gmail.com", name: "Tharindu", password: "$2b$10$B6JQNeTMZpJwU4ZilfJz1eEccrXTquJHNQuzJljKz7XIaTpaIAi3W" },
+  { id: 32, email: "kamal12@gmail.com", name: "Kamal", password: "$2b$10$B6JQNeTMZpJwU4ZilfJz1eEccrXTquJHNQuzJljKz7XIaTpaIAi3W" },
+  { id: 33, email: "mahesh14@gmail.com", name: "Mahesh Aponso", password: "$2b$10$B6JQNeTMZpJwU4ZilfJz1eEccrXTquJHNQuzJljKz7XIaTpaIAi3W" },
+  { id: 34, email: "suresh17@gmail.com", name: "Suresh Harindra", password: "$2b$10$B6JQNeTMZpJwU4ZilfJz1eEccrXTquJHNQuzJljKz7XIaTpaIAi3W" },
+  { id: 35, email: "sunil18@gmail.com", name: "Sunil", password: "$2b$10$B6JQNeTMZpJwU4ZilfJz1eEccrXTquJHNQuzJljKz7XIaTpaIAi3W" },
+  { id: 36, email: "janaka19@gmail.com", name: "Janaka", password: "$2b$10$B6JQNeTMZpJwU4ZilfJz1eEccrXTquJHNQuzJljKz7XIaTpaIAi3W" },
+  { id: 37, email: "nimal21@gmail.com", name: "Nimal", password: "$2b$10$B6JQNeTMZpJwU4ZilfJz1eEccrXTquJHNQuzJljKz7XIaTpaIAi3W" },
+  { id: 38, email: "janaka23@gmail.com", name: "Janaka", password: "$2b$10$B6JQNeTMZpJwU4ZilfJz1eEccrXTquJHNQuzJljKz7XIaTpaIAi3W" },
+  { id: 39, email: "kasun24@gmail.com", name: "Kasun", password: "$2b$10$B6JQNeTMZpJwU4ZilfJz1eEccrXTquJHNQuzJljKz7XIaTpaIAi3W" },
+  { id: 40, email: "pradeep26@gmail.com", name: "Pradeep", password: "$2b$10$B6JQNeTMZpJwU4ZilfJz1eEccrXTquJHNQuzJljKz7XIaTpaIAi3W" },
+  { id: 41, email: "samantha27@gmail.com", name: "Samantha", password: "$2b$10$B6JQNeTMZpJwU4ZilfJz1eEccrXTquJHNQuzJljKz7XIaTpaIAi3W" },
+  { id: 42, email: "lakshan28@gmail.com", name: "Lakshan", password: "$2b$10$B6JQNeTMZpJwU4ZilfJz1eEccrXTquJHNQuzJljKz7XIaTpaIAi3W" },
+  { id: 43, email: "rohan29@gmail.com", name: "Rohan", password: "$2b$10$B6JQNeTMZpJwU4ZilfJz1eEccrXTquJHNQuzJljKz7XIaTpaIAi3W" },
+  { id: 44, email: "suresh31@gmail.com", name: "Suresh", password: "$2b$10$B6JQNeTMZpJwU4ZilfJz1eEccrXTquJHNQuzJljKz7XIaTpaIAi3W" },
+  { id: 45, email: "dinesh33@gmail.com", name: "Dinesh", password: "$2b$10$B6JQNeTMZpJwU4ZilfJz1eEccrXTquJHNQuzJljKz7XIaTpaIAi3W" },
+  { id: 46, email: "tharindu35@gmail.com", name: "Tharindu", password: "$2b$10$B6JQNeTMZpJwU4ZilfJz1eEccrXTquJHNQuzJljKz7XIaTpaIAi3W" }
+
 ];
 
+// $2b$10$eBj.BXCQ8Z8X4OPVfgbvf.e6zKxoyg42IW45QG0KSektWxGpBuw8q - Bakery@123\
+// $2b$10$B6JQNeTMZpJwU4ZilfJz1eEccrXTquJHNQuzJljKz7XIaTpaIAi3W - vendor@123
 export const LIVE_LOCATION = [
   {
     latitude: 6.926147,
@@ -77,13 +118,34 @@ export const BAKERIES = [
     latitude: 6.924575,
     longitude: 79.987234,
   },
+  { managerId: 10, name: "New Lanka Bakers", id: 21, latitude: null, longitude: null },
+  { managerId: 11, name: "Sethumali Bakers", id: 22, latitude: null, longitude: null },
+  { managerId: 12, name: "Golden Brown Bakers", id: 23, latitude: null, longitude: null },
+  { managerId: 13, name: "Sasiri Bakers", id: 24, latitude: null, longitude: null },
+  { managerId: 14, name: "Nipuna Bakery", id: 25, latitude: null, longitude: null },
+  { managerId: 15, name: "Wasana Bakers", id: 26, latitude: null, longitude: null },
+  { managerId: 16, name: "Dilshan Bakers", id: 27, latitude: null, longitude: null },
+  { managerId: 17, name: "Shanthi Bakery", id: 28, latitude: null, longitude: null },
+  { managerId: 18, name: "Piumi Bakers", id: 29, latitude: null, longitude: null },
+  { managerId: 19, name: "Rathna Bakers", id: 30, latitude: null, longitude: null },
+  { managerId: 20, name: "Sumudu Bakers", id: 31, latitude: null, longitude: null },
+  { managerId: 21, name: "Madusha Bakery", id: 32, latitude: null, longitude: null }
 ];
 
 export const MANAGERS = [
-  {
-    id: 1,
-    userId: 1,
-  },
+  { id: 1, userId: 1,},
+  { id: 10, userId: 10,},
+  { id: 11, userId: 11,},
+  { id: 12, userId: 12,},
+  { id: 13, userId: 13,},
+  { id: 14, userId: 14,},
+  { id: 15, userId: 15,},
+  { id: 16, userId: 16,},
+  { id: 17, userId: 17,},
+  { id: 18, userId: 18,},
+  { id: 19, userId: 19,},
+  { id: 20, userId: 20,},
+  { id: 21, userId: 21,},
 ];
 
 export const EMPLOYEES = [
@@ -107,10 +169,32 @@ export const EMPLOYEES = [
     userId: 4,
     bakeryId: 1,
   },
-  {
-    id: 13,
-    userId: 5,
-  },
+  { id: 13, userId: 5 },
+  { id: 14, userId: 22,bakeryId: 21 },
+  { id: 15, userId: 23,bakeryId: 21 },
+  { id: 16, userId: 24,bakeryId: 21 },
+  { id: 17, userId: 25,bakeryId: 22 },
+  { id: 18, userId: 26,bakeryId: 22 },
+  { id: 19, userId: 27,bakeryId: 23 },
+  { id: 20, userId: 28,bakeryId: 23 },
+  { id: 21, userId: 29,bakeryId: 24 },
+  { id: 22, userId: 30,bakeryId: 24 },
+  { id: 23, userId: 31,bakeryId: 25 },
+  { id: 24, userId: 32,bakeryId: 25 },
+  { id: 25, userId: 33,bakeryId: 25 },
+  { id: 26, userId: 34,bakeryId: 26 },
+  { id: 27, userId: 35,bakeryId: 27 },
+  { id: 28, userId: 36,bakeryId: 27 },
+  { id: 29, userId: 37,bakeryId: 27 },
+  { id: 30, userId: 38,bakeryId: 28 },
+  { id: 31, userId: 39,bakeryId: 29 },
+  { id: 32, userId: 40,bakeryId: 29 },
+  { id: 33, userId: 41,bakeryId: 30 },
+  { id: 34, userId: 42,bakeryId: 30 },
+  { id: 35, userId: 43,bakeryId: 30 },
+  { id: 36, userId: 44,bakeryId: 31 },
+  { id: 37, userId: 45,bakeryId: 31 },
+  { id: 38, userId: 46,bakeryId: 32 }
 ];
 
 export const PRODUCTS = [
@@ -204,11 +288,101 @@ export const PRODUCTS = [
     bakeryId: null,
     userId: 5,
   },
+  {
+    id: 10,
+    name: "Seeni Sambol Bun",
+    price: 90,
+    stock: 27,
+    sold: 24,
+    bakeryId: 21,
+    userId: 22
+  },
+  {
+    id: 11,
+    name: "Vegetable Roti",
+    price: 70,
+    stock: 25,
+    sold: 22,
+    bakeryId: 27,
+    userId: 35
+  },
+  {
+    id: 12,
+    name: "Egg Roll",
+    price: 110,
+    stock: 30,
+    sold: 29,
+    bakeryId: 24,
+    userId: 30
+  },
+  {
+    id: 13,
+    name: "Tea Bun",
+    price: 85,
+    stock: 26,
+    sold: 23,
+    bakeryId: 30,
+    userId: 42
+  },
+  {
+    id: 14,
+    name: "Maalu Paan (Fish Bun)",
+    price: 100,
+    stock: 28,
+    sold: 27,
+    bakeryId: 25,
+    userId: 33
+  },
+  {
+    id: 15,
+    name: "Cream Bun",
+    price: 80,
+    stock: 22,
+    sold: 20,
+    bakeryId: 28,
+    userId: 44
+  },
+  {
+    id: 16,
+    name: "Butter Cake Slice",
+    price: 95,
+    stock: 24,
+    sold: 22,
+    bakeryId: 22,
+    userId: 26
+  },
+  {
+    id: 17,
+    name: "Kimbula Banis",
+    price: 120,
+    stock: 23,
+    sold: 21,
+    bakeryId: 31,
+    userId: 43
+  },
+  {
+    id: 18,
+    name: "Chicken Roll",
+    price: 150,
+    stock: 21,
+    sold: 19,
+    bakeryId: 23,
+    userId: 32
+  },
+  {
+    id: 19,
+    name: "Doughnut",
+    price: 130,
+    stock: 27,
+    sold: 23,
+    bakeryId: 29,
+    userId: 40
+  }
 ];
 
 export const ORDERS = [
   {
-    id: 1,
+    id: 90,
     price: 130,
     sold: 6,
     name: "Bread",
@@ -220,7 +394,7 @@ export const ORDERS = [
     productId: 1,
   },
   {
-    id: 2,
+    id: 91,
     price: 130,
     sold: 6,
     name: "Bread",
@@ -232,7 +406,7 @@ export const ORDERS = [
     productId: 1,
   },
   {
-    id: 3,
+    id: 92,
     price: 130,
     sold: 6,
     name: "Bread",
@@ -244,7 +418,7 @@ export const ORDERS = [
     productId: 1,
   },
   {
-    id: 4,
+    id: 93,
     price: 140,
     sold: 4,
     name: "Croissant",
@@ -256,7 +430,7 @@ export const ORDERS = [
     productId: 2,
   },
   {
-    id: 5,
+    id: 94,
     price: 140,
     sold: 4,
     name: "Croissant",
@@ -268,7 +442,7 @@ export const ORDERS = [
     productId: 2,
   },
   {
-    id: 6,
+    id: 95,
     price: 140,
     sold: 4,
     name: "Croissant",
@@ -280,7 +454,7 @@ export const ORDERS = [
     productId: 2,
   },
   {
-    id: 7,
+    id: 96,
     price: 120,
     sold: 5,
     name: "Baguette",
@@ -292,7 +466,7 @@ export const ORDERS = [
     productId: 3,
   },
   {
-    id: 8,
+    id: 97,
     price: 120,
     sold: 5,
     name: "Baguette",
@@ -304,7 +478,7 @@ export const ORDERS = [
     productId: 3,
   },
   {
-    id: 9,
+    id: 98,
     price: 150,
     sold: 3,
     name: "Danish Pastry",
@@ -316,7 +490,7 @@ export const ORDERS = [
     productId: 4,
   },
   {
-    id: 10,
+    id: 99,
     price: 150,
     sold: 3,
     name: "Danish Pastry",
@@ -328,7 +502,7 @@ export const ORDERS = [
     productId: 4,
   },
   {
-    id: 11,
+    id: 100,
     price: 160,
     sold: 7,
     name: "Muffin",
@@ -340,7 +514,7 @@ export const ORDERS = [
     productId: 5,
   },
   {
-    id: 12,
+    id: 101,
     price: 160,
     sold: 7,
     name: "Muffin",
@@ -351,7 +525,47 @@ export const ORDERS = [
     longitude: 79.990219,
     productId: 5,
   },
+  
 ];
+
+// const sellerinfor = [
+//   { id: 1, userId: 10,bakeryId: 21 }, 
+//   { id: 2, userId: 11,bakeryId: 22 }, 
+//   { id: 3, userId: 12,bakeryId: 23 }, 
+//   { id: 4, userId: 13,bakeryId: 24 }, 
+//   { id:5, userId: 44,bakeryId: 25 }, 
+//   { id: 6, userId: 15,bakeryId: 26 }, 
+//   { id: 7, userId: 16,bakeryId: 27 }, 
+//   { id: 8, userId: 17,bakeryId: 28 }, 
+//   { id: 9, userId: 18,bakeryId: 29 }, 
+//   { id: 10, userId: 19,bakeryId: 30 }, 
+//   { id: 11, userId: 21,bakeryId: 21 }, 
+//   { id: 14, userId: 22,bakeryId: 21 },
+//   { id: 15, userId: 23,bakeryId: 21 },
+//   { id: 16, userId: 24,bakeryId: 21 },
+//   { id: 17, userId: 25,bakeryId: 22 },
+//   { id: 18, userId: 26,bakeryId: 22 },
+//   { id: 19, userId: 27,bakeryId: 23 },
+//   { id: 20, userId: 28,bakeryId: 23 },
+//   { id: 21, userId: 29,bakeryId: 24 },
+//   { id: 22, userId: 30,bakeryId: 24 },
+//   { id: 23, userId: 31,bakeryId: 25 },
+//   { id: 24, userId: 32,bakeryId: 25 },
+//   { id: 25, userId: 33,bakeryId: 25 },
+//   { id: 26, userId: 34,bakeryId: 26 },
+//   { id: 27, userId: 35,bakeryId: 27 },
+//   { id: 28, userId: 36,bakeryId: 27 },
+//   { id: 29, userId: 37,bakeryId: 27 },
+//   { id: 30, userId: 38,bakeryId: 28 },
+//   { id: 31, userId: 39,bakeryId: 29 },
+//   { id: 32, userId: 40,bakeryId: 29 },
+//   { id: 33, userId: 41,bakeryId: 30 },
+//   { id: 34, userId: 42,bakeryId: 30 },
+//   { id: 35, userId: 43,bakeryId: 30 },
+//   { id: 36, userId: 44,bakeryId: 31 },
+//   { id: 37, userId: 45,bakeryId: 31 },
+//   { id: 38, userId: 46,bakeryId: 32 }, 
+// ];
 
 import { PrismaClient } from "@prisma/client";
 

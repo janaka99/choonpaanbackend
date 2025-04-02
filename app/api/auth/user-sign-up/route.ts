@@ -38,9 +38,10 @@ export async function POST(req: NextRequest) {
     // Hash the password for secure storage
     const hashedPassword = await bcrypt.hash(password, 10);
 
+
     // Start a transaction to create both user and employee records
     const transaction = await prisma.$transaction(
-      async (prisma) => {
+      async (prisma:any) => {
         // Create the user record
         const user = await prisma.user.create({
           data: {
