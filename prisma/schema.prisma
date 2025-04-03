@@ -133,7 +133,7 @@ model LiveLocation{
 
 model Journey{
   id              Int     @id @default(autoincrement())
-  route           Json 
+  route         Json?
   userid          Int
   User            User    @relation(fields: [userid], references: [id])
   endAt           DateTime?

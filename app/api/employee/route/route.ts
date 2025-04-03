@@ -100,7 +100,24 @@ export async function GET(req: NextRequest) {
       }
       return distance.distance <= radius;
     });
-
+     if(ordersWithinRadius.length < 5) {
+      return NextResponse.json(
+        {
+          error: false,
+          message: "Product fetched successfull",
+          orders: JSON.stringify([]),
+          possibleRoutes: JSON.stringify([]) || [],
+          otherDrivers: JSON.stringify([]) || [],
+          journey: JSON.stringify(journey) || null,
+          location: JSON.stringify({
+            latitude: location.latitude,
+            longitude: location.longitude,
+            name: location.name,
+          }),
+        },
+        { status: 200 }
+      );
+     }
     // this function used to generated possible routes using AI
     const result = await GENERATE_ROUTES(
       location,

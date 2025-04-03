@@ -23,8 +23,8 @@ export async function POST(req: NextRequest) {
     }
     const myJourney = JSON.parse(journey);
     const { success, data, error } = JourneySchema.safeParse({
-      route: myJourney.route,
-      orderInsights: myJourney.orderInsights,
+      route: myJourney?.route ?? null,
+      orderInsights: myJourney?.orderInsights ?? null,
     });
 
     if (!success) {
@@ -52,24 +52,43 @@ export async function POST(req: NextRequest) {
         { status: 200 }
       );
     }
+    if(data.route){
 
-    // Create a new journey for the user
-    const createdJourney = await prisma.journey.create({
-      data: {
-        route: data.route,
-        orderInsights: data.orderInsights ? data.orderInsights : {},
-        userid: user.id,
-      },
-    });
+      // Create a new journey for the user
+      const createdJourney = await prisma.journey.create({
+        data: {
+          route: data.route,
+          orderInsights: data.orderInsights ? data.orderInsights : {},
+          userid: user.id,
+        },
+      });
+      return NextResponse.json(
+        {
+          error: false,
+          message: "Journey has been started",
+          journey: JSON.stringify(createdJourney),
+        },
+        { status: 201 }
+      );
+    }else{
+      const createdJourney = await prisma.journey.create({
+        data: {
+          route: undefined,
+          orderInsights: data.orderInsights ? data.orderInsights : {},
+          userid: user.id,
+        },
+      });
+      return NextResponse.json(
+        {
+          error: false,
+          message: "Journey has been started",
+          journey: JSON.stringify(createdJourney),
+        },
+        { status: 201 }
+      );
+    }
 
-    return NextResponse.json(
-      {
-        error: false,
-        message: "Journey has been started",
-        journey: JSON.stringify(createdJourney),
-      },
-      { status: 201 }
-    );
+
   } catch (error) {
     console.log(error);
     return NextResponse.json(
