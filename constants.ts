@@ -1,2 +1,2 @@
-export const RADIUS = 10000;
+export const RADIUS = 1000;
 // 10km
