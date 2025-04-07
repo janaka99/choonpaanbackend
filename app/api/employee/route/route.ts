@@ -57,7 +57,7 @@ export async function GET(req: NextRequest) {
         userId: user.id,
       },
     });
-
+    // console.log("Products my ", products)
     // find  started journey of the user
     const journey = await prisma.journey.findFirst({
       where: {
@@ -100,6 +100,9 @@ export async function GET(req: NextRequest) {
       }
       return distance.distance <= radius;
     });
+
+    // console.log("Orders withing the radisu ", ordersWithinRadius)
+
      if(ordersWithinRadius.length < 5) {
       return NextResponse.json(
         {

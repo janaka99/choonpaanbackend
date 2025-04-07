@@ -126,6 +126,7 @@ export async function POST(req: NextRequest) {
       { status: 201 }
     );
   } catch (e) {
+    console.log(e)
     // Handle unexpected errors and return a generic error response
     return NextResponse.json(
       {

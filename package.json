@@ -9,11 +9,15 @@
     "lint": "next lint",
     "db:migrate": "prisma migrate dev --name",
     "db:generate": "npx prisma generate",
-    "db:studio": "prisma studio"
+    "db:studio": "prisma studio",
+    "test": "jest"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"
   },
+  "jest": {
+  "preset": "jest-expo"
+},
   "dependencies": {
     "@ai-sdk/openai": "^1.2.6",
     "@mapbox/polyline": "^1.2.1",
@@ -36,10 +40,13 @@
     "zod": "^3.24.2"
   },
   "devDependencies": {
+    "@types/jest": "^29.5.14",
     "@types/jsonwebtoken": "^9.0.9",
     "@types/node": "^20.17.24",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "jest": "^29.7.0",
+    "jest-expo": "^52.0.6",
     "prisma": "^6.4.1",
     "ts-node": "^10.9.2",
     "tsx": "^4.19.3",

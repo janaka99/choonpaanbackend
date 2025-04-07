@@ -93,12 +93,13 @@ export const GENERATE_ROUTES = async (
 
             Now, generate the optimized delivery routes.`,
     });
-
     // Step 3: Return the Generated Routes
     // Once the AI generates the routes, we return the result to the caller.
     // This result contains the 3 optimized routes with detailed stop points and demand items.
+    // console.log(JSON.stringify(result?.object.routes, null, 2));
     return result;
   } catch (error) {
+    console.log(error)
     // Step 4: Handle Errors
     // If any error occurs during the process (e.g., missing inputs or AI model issues),
     // we log the error for debugging and return `null` to indicate failure.
